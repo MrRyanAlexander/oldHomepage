@@ -1,0 +1,35 @@
+metadate
+
+reference links
+
+(css)
+style 1
+style 2
+style 3 
+style 4
+
+header
+
+body
+
+main content
+
+
+left_button1/style 1
+left_button2/style 2
+left_button3/style 3
+left_button4/style 4
+$('#changeButton').click(function() {
+
+//add the code here to wrap every div with the class
+//'wrapMe' with a div with the class 'wrapper'
+$('.wrapMe').wrap('<div class="wrapper"/>');
+
+});
+
+right_button1/current projects
+right_button2/past projects
+
+
+
+
