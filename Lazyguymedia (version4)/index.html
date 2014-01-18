@@ -1,0 +1,471 @@
+<!doctype html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>Lazyguymedia by:Pminus</title>
+
+<link type="text/css"rel="stylesheet" href="style.css" media="screen">
+<link type="text/css"rel="stylesheet" href="styles.css" media="screen">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:light|Reenie+Beanie" />
+
+
+</head>
+
+<body  onload="initialize()" onunload="GUnload()">
+
+<div id="greeting"></div>
+
+  <div id="attribution">Data via <a href="http://code.google.com/apis/base" target="_blank">Google Base API</a></div>
+
+  <hgroup>
+    <h1>Locate Nearby Jobs w/ HTML<sub>5</sub></h1>
+    <h2>...and know the commute!</h2>
+  </hgroup>
+
+  <div id="content">
+    <div id="main">
+      <div id="search-area">Find postings for: <span id="position" data-previous="engineer" contenteditable>engineer</span> within 
+      <span id="within" data-previous="15" contenteditable>15</span> miles of me.</div>
+      <p id="nearest">Out of <span id="num-results">-</span> results, the nearest job is: <span id="closest-job">loading...</span></p>
+      <div id="mapContainer"></div>
+    </div>
+  </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyC0w5h4iYJGln7LI1GiUrqlRPK3mm3uNEQ" type="text/javascript"></script>
+  <script>
+    const JOB_CATEGORY = 'jobs';
+    var here = {};
+    var closestJob = null;
+    var geocoder = new GClientGeocoder();
+    var map;
+
+    var jobPositionEl = document.getElementById('position');
+    var withinEl = document.getElementById('within');
+
+    window.onload = function() {
+      if (!GBrowserIsCompatible() || !navigator.geolocation) {
+        handleError("Can't do this!");
+        return;
+      }
+
+      map = new GMap2(document.getElementById('mapContainer'));
+      map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+      map.setUIToDefault();
+
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          here.pos = new GLatLng(position.coords.latitude,
+                                 position.coords.longitude);
+          map.setCenter(here.pos);
+          map.addOverlay(new GMarker(here.pos));
+
+          geocoder.getLocations(here.pos, findNearbyJobs);
+        },
+        handleError
+      );
+    };
+
+    function handleError(message) {
+      alert(message || "Can't do this!");
+    }
+
+   function resetMap() {
+     closestJob = null;
+     document.getElementById('closest-job').textContent = 'Loading...';
+     document.getElementById('num-results').textContent = '-';
+     map.clearOverlays();
+     map.setCenter(here.pos);
+     map.addOverlay(new GMarker(here.pos));
+   }
+
+    function doQuery(el, jobPositionEl, withinEl) {
+      if (el.attributes['data-previous'].value == el.textContent) {
+        return;
+      } else if (el.textContent == '') {
+        el.textContent = el.attributes['data-previous'].value
+        return;
+      }
+      el.attributes['data-previous'].value = el.textContent;
+      resetMap();
+      queryGoogleBase(JOB_CATEGORY, jobPositionEl.textContent, here.address,
+                      withinEl.textContent + 'mi');
+    }
+
+    jobPositionEl.addEventListener('blur', function(e) {
+      doQuery(this, jobPositionEl, withinEl);
+    });
+
+    jobPositionEl.addEventListener('keypress', function(e) {
+      // Prevent enter key from sticking return in the contenteditable box.
+      if (e.keyCode == 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        doQuery(this, jobPositionEl, withinEl);
+      }
+    });
+
+    withinEl.addEventListener('blur', function(e) {
+      doQuery(this, jobPositionEl, withinEl);
+    });
+
+    withinEl.addEventListener('keypress', function(e) {
+      // Prevent enter key from sticking return in the contenteditable box.
+      if (e.keyCode == 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        doQuery(this, jobPositionEl, withinEl);
+      }
+    });
+
+    document.getElementById('closest-job').addEventListener('click', function(e) {
+      map.openInfoWindowHtml(
+          closestJob.latlng, generateInfoWindowHTML(closestJob));
+    });
+
+    function generateInfoWindowHTML(obj) {
+      return ['<h4>', obj.link, ' - ', obj.employer, '</h4>',
+              '<ul><li>Published: ', obj.published,
+              '<li>Function: ', obj.jobFunc, '</li>',
+              '<li>Description: ', obj.description, '</li>',
+              '<li>Hours: ', obj.jobType, '</li></ul>'].join('');
+    }
+
+    function findNearbyJobs(response) {
+      if (!response || response.Status.code != 200) {
+        alert('Status Code:' + response.Status.code);
+      } else {
+        here.address = response.Placemark[0].address;
+        queryGoogleBase(JOB_CATEGORY, jobPositionEl.textContent, here.address,
+                        withinEl.textContent + 'mi');
+      }
+    }
+
+    function queryGoogleBase(type, query, address, radius) {
+      var q = ['http://www.google.com/base/feeds/snippets/-/', type,
+               '?q=', encodeURIComponent(query), '&bq=[location:%40"', address,
+               '"%2B', radius, ']&content=geocodes&max-results=10&alt=json'].join('');
+
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function(e) {
+        if (this.readyState == 4 && this.status == 200) {
+          var resp = JSON.parse(this.responseText);
+
+          if (!resp.feed || !resp.feed.entry || !resp.feed.entry.length) {
+            document.getElementById('closest-job').textContent = 'No results for that query.';
+            return;
+          }
+
+          var newBounds = new GLatLngBounds();
+
+          resp.feed.entry.forEach(function(val, i) {
+            var job = {};
+            if (!val.g$location[0].g$latitude ||
+                !val.g$location[0].g$longitude) {
+              return;
+            }
+            job.latlng = new GLatLng(parseFloat(val.g$location[0].g$latitude.$t),
+                                     parseFloat(val.g$location[0].g$longitude.$t));
+            job.title = val.title.$t;
+            job.description = val.content.$t;
+            job.author = val.author ? val.author[0].$t : 'N/A';
+            job.employer = val.g$employer ? val.g$employer[0].$t : 'N/A';
+            job.jobFunc = val.g$job_function ? val.g$job_function[0].$t : 'N/A';
+            job.jobType = val.g$job_type ? val.g$job_type[0].$t : 'N/A';
+
+            job.published = 'N/A';
+            if (val.g$publish_date) {
+              var parts = val.g$publish_date[0].$t.split('-');
+              job.published = [parts[1], parts[2], parts[0].substring(2)].join('/');
+            }
+
+            var altLink = null;
+            for (var j = 0, link; link = val.link[j]; ++j) {
+              if (link.rel == 'alternate') {
+                altLink = link.href;
+                break;
+              }
+            }
+            job.link = altLink ? '<a href="' + altLink + '" target="_blank">' + 
+                                 job.title + '</a>' : job.title;
+
+            // Calculate closest found job.
+            if (!closestJob ||
+                job.latlng.distanceFrom(here.pos) <
+                closestJob.latlng.distanceFrom(here.pos)) {
+              closestJob = job;
+            }
+
+            var myIcon = new GIcon();
+            myIcon.image = 'pushpin.png';
+            myIcon.shadow = 'pushpin_shadow.png';
+            myIcon.iconSize = new GSize(32, 32);
+            myIcon.shadowSize = new GSize(59, 32);
+            myIcon.iconAnchor = new GPoint(10, 35);
+            myIcon.infoWindowAnchor = new GPoint(30, 5);
+
+            var marker = new GMarker(job.latlng, {icon: myIcon});
+
+            GEvent.addListener(marker, 'click', function(e) {
+              map.openInfoWindowHtml(job.latlng, generateInfoWindowHTML(job),
+                                     {pixelOffset: new GSize(15, -18)});
+            });
+
+            newBounds.extend(job.latlng);
+            map.addOverlay(marker);
+          });
+
+          map.setCenter(newBounds.getCenter(),
+                        map.getBoundsZoomLevel(newBounds));
+
+          document.getElementById('num-results').textContent = resp.feed.entry.length;
+          document.getElementById('closest-job').textContent = [
+              Math.round(closestJob.latlng.distanceFrom(here.pos) / 1609), ' miles away - ',
+              closestJob.title].join('');
+        }
+      };
+      xhr.open('GET', q);
+      xhr.send();
+    }
+  </script>
+<div class="box">           
+<label for="qty"><abbr title="Quantity">Qty</abbr></label>
+<input id="qty" value="0" />
+<button id="down" onclick="modify_qty(-1)">-1</button>
+<button id="up" onclick="modify_qty(1)">+1</button>
+</div>
+<div class="box2">           
+<label for="qty2"><abbr title="Quantity">Qty</abbr></label>
+<input id="qty2" value="0" />
+<button id="down" onclick="modify_qty2(-1)">-1</button>
+<button id="up" onclick="modify_qty2(1)">+1</button>
+</div> 
+ <!--begin age verification module & styles -->
+ 
+<style type="text/css" media="screen">
+	body.age-gate-visible { overflow: hidden; }
+	#age-gate {
+		background: url(http://lazyguymedia.info/images/stripeBG.png) repeat;
+		color: #fff;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		opacity: 100;
+		z-index: 99999;
+		padding-top: 50px;
+		font-size: 18px;
+		text-align: center;
+		display: none;
+	}
+	
+	#ageGateContent{
+	width:400px;
+	height:300px;
+	margin:150px auto;
+	padding:20px;
+	border-radius:15px;
+	background:#05006E;
+	color:#fff;
+	font-weight:600;
+	}
+	
+	#age-gate select { 
+	color:#fff; 
+	font-weight:600; 
+	background:#0900B3; t
+	}
+	
+	#ageEnter { 
+	margin-top: 10px;
+	}
+	
+	#ageEnter input{
+	width:100px; 
+	height:35px;
+	background:#fff;
+	border-radius:5px;
+	font-size:15px;
+	color:#05006E;
+	font-weight:600;
+	}
+</style>
+
+	<div id="age-gate">
+		<div id="ageGateContent">
+		<img src="http://lazyguymedia.info/images/logo_clear_wht.png">
+        <p>You must be 18 to ENTER our website.</p>
+									<p> Please verify your birthdate.</p>
+		<div id="age-pickers">
+			<form id="age-picker-form">
+				<select id="ageMonth" name="ageMonth"></select>
+				<select id="ageDay" name="ageDay"></select>
+				<select id="ageYear" name="ageYear"></select>
+		<div id="ageEnter">
+				<input id="ageEnterSite" type="submit" value="Enter Site">
+		</div>
+	</form>
+	</div>
+</div>
+</div>
+<script type="text/javascript" charset="utf-8">
+
+
+	function writeCookie(key,value,days) {
+		if (days) {
+		        var date = new Date();
+		        date.setTime(date.getTime()+(days*24*60*60*1000));
+		        var expires = "; expires="+date.toGMTString();
+		}
+		else var expires = "";
+		document.cookie = key+"="+value+expires+"; path=/";
+	}
+
+	function readCookie(key) {
+		var nameEQ = key + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0;i < ca.length;i++) {
+		        var c = ca[i];
+		        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		}
+		return null;
+	}
+
+
+	function ageGate() {
+		var monthDays = {
+			1: 31,
+			2: 29,
+			3: 31,
+			4: 30,
+			5: 31,
+			6: 30,
+			7: 31,
+			8: 31,
+			9: 30,
+			10: 31,
+			11: 30,
+			12: 31
+		};
+
+		var months = {
+			1: 'January',
+			2: 'February',
+			3: 'March',
+			4: 'April',
+			5: 'May',
+			6: 'June',
+			7: 'July',
+			8: 'August',
+			9: 'September',
+			10: 'October',
+			11: 'November',
+			12: 'December'
+		};
+
+		var monthOptions = [];
+		var dayOptions = {};
+		var yearOptions = [];
+
+		for (var month in monthDays) {
+			var days = monthDays[month];
+			monthOptions.push('<option value="' + month + '">' + months[month] + '</option>');
+			dayOptions[month] = [];
+			for (var i=1; i <= days; i++) {
+				var day = i;
+				dayOptions[month].push('<option value="' + day + '">' + day + '</option>');
+			}
+		}
+
+		var currentYear = new Date();
+		currentYear = currentYear.getFullYear();
+
+		var startYear = currentYear - 120;
+
+		for (var y=currentYear; y > startYear; y--) {
+			yearOptions.push('<option value="' + y + '">' + y + '</option>');
+		}
+
+
+
+		jQuery(document).ready(function($s){
+			var monthHtml = '';
+			for (var j=0; j < monthOptions.length; j++) {
+				var html = monthOptions[j];
+				monthHtml += html;
+			}
+
+			$s('#ageMonth').html(monthHtml);
+
+			var yearHtml = '';
+			for (var i=0; i < yearOptions.length; i++) {
+				yearHtml += yearOptions[i];
+			}
+
+			$s('#ageYear').html(yearHtml);
+
+			$s('#ageMonth').bind('change', function(){
+				var dayHtml = '';
+				var month = $s(this).val();
+
+				for (var i=0; i < dayOptions[month].length; i++) {
+					dayHtml += dayOptions[month][i];
+				}
+
+				$s('#ageDay').html(dayHtml);
+			});
+
+			$s('#ageEnterSite').click(function(e){
+				e.preventDefault();
+				var date = new Date();
+				date.setMonth($s('#ageMonth').val() - 1);
+				date.setDate($s('#ageDay').val());
+				date.setYear($s('#ageYear').val());
+
+				var maxDate = new Date();
+				// alert(maxDate.getFullYear());
+
+				maxDate.setYear(maxDate.getFullYear() - 18);
+
+				if (date <= maxDate) {
+					writeCookie('pminus_age_verified', '1', 30);
+					$s('#age-gate').fadeOut(function(){
+						$s(this).remove();
+						$s('body').removeClass('age-gate-visible');
+					});
+				}
+				else {
+					window.location.href = 'http://en.wikipedia.org/wiki/Parental_Advisory';
+				}
+
+			});
+
+			$s('#ageMonth').change(); // load default month
+			// $s('#ageDay').prop('disabled', true);
+			setTimeout(function(){
+				$s('body').addClass('age-gate-visible');
+				$s('#age-gate').fadeIn();
+			}, 200);
+		});
+	}
+
+	if (readCookie('pminus_age_verified')) {
+
+	} else {
+		ageGate();
+	}
+
+</script>
+<!--End age verification module -->
+<script type="text/javascript" src="http://www.lazyguymedia.info/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="http://www.lazyguymedia.info/jquery.cookie.js"></script>
+<script type="text/javascript" src="http://www.lazyguymedia.info/buttons.js"></script>
+<script type="text/javascript" src="http://www.lazyguymedia.info/showthetime.js"></script> 
+<script type="text/javascript" src="http://www.lazyguymedia.info/ageverify.js"></script>
+
+</body>
+</html>

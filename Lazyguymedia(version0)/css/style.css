@@ -1,0 +1,51 @@
+body {
+	padding:0; /* Gets rid of the automatic padding */
+	margin:0; /* on HTML documents */
+	font-family:Lucida Grande, Helvetica, Arial, sans-serif;
+	font-size:12px;
+}
+
+#container {
+	background-color:white;
+	width:auto;
+	padding-top:35px;
+}
+
+#sec1 {
+	background-color:#FFF;
+	text-align:center;
+}
+
+#sec2 {
+	background-color:#FFF;
+	text-align:center;
+}
+
+#sec3 {
+	background-color:#FFF;
+	text-align:center;
+}
+
+#sec4 {
+	background-color:#FFF;
+	text-align:center;
+}
+
+#footer {
+	background-color:000000;
+	padding-bottom:10px;
+	width:100%;
+	text-align:center;
+	color:fff;
+	bottom: auto;
+}
+
+	
+
+
+	
+	
+  
+#container #sec3 table {
+	text-align: center;
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>LAZYGUYMEDIA</title>
+<!-- TemplateEndEditable -->
+<!-- This website is being brought to you by: Ryan Alexander. I started this website as a way to learn HTML 
+and then I learned that I need to know much more than just HTML. I have already started learning several 
+different languages and via this source, you will be able to find my code trails. :-) -->
+
+<meta name="description" content="Education tutorial on HTML and CSS" /> 
+<meta name="author" content="Ryan Alexander" />
+
+<link href="../css/demo.css" rel="stylesheet" type="text/css" />
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- DO NOT DELETE -->
+<link rel="stylesheet" href="../css/sticky-navigation.css" />
+
+<!-- FAVICON -->
+<link rel="shortcut icon" href="/lazy.ico" type="image/x-icon" >
+    
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script>
+$(function() {
+
+	// grab the initial top offset of the navigation 
+	var sticky_navigation_offset_top = $('#sticky_navigation').offset().top;
+	
+	// our function that decides weather the navigation bar should have "fixed" css position or not.
+	var sticky_navigation = function(){
+		var scroll_top = $(window).scrollTop(); // our current vertical position from the top
+		
+		// if we've scrolled more than the navigation, change its position to fixed to stick to top, otherwise change it back to relative
+		if (scroll_top > sticky_navigation_offset_top) { 
+			$('#sticky_navigation').css({ 'position': 'fixed', 'top':0, 'left':0 });
+		} else {
+			$('#sticky_navigation').css({ 'position': 'relative' }); 
+		}   
+	};
+	
+	// run our function on load
+	sticky_navigation();
+	
+	// and run it again every time you scroll
+	$(window).scroll(function() {
+		 sticky_navigation();
+	});
+	
+	// NOT required:
+	// for this demo disable all links that point to "#"
+	$('a[href="#"]').click(function(event){ 
+		event.preventDefault(); 
+	});
+	
+});
+
+</script>
+
+<!-- UPDATE THE DATE AFTER EACH EDIT 11/20/12 @ 9:45PM PST -->
+
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+</head>
+<body>
+<!-- TemplateBeginRepeat name="RepeatRegion1" -->
+<div id="demo_top_wrapper">
+  <div id="demo_top">
+    <div class="demo_container">
+      <div id="my_logo"><!-- TemplateBeginRepeat name="RepeatRegion8" --><a href="/index.html"><img src="../images/Lazy.png" width="728" height="90" /></a><!-- TemplateEndRepeat --></div>
+    </div>
+    <!-- TemplateBeginRepeat name="RepeatRegion10" -->
+    <div class="right_container">
+      <div id="rightcontent">
+        <p>&nbsp;</p>
+        <p>The creator of the Python Code named it after the 'Monty Python'</p>
+        <p>&nbsp;</p>
+        <p>Today is 11-29-12        </p>
+        <p>&nbsp;</p>
+        <p>Last update </p>
+        <p>@ 6:20pm PST      </p>
+      </div>
+    </div>
+    <!-- TemplateEndRepeat --><!-- TemplateBeginRepeat name="RepeatRegion9" -->
+      <div class="left_container">
+        <div id="leftcontent">
+          <p><span id="Join">py. Join my<br>
+          mailing list</span></p>
+          <form name="input" action="html_form_action.asp" method="get">
+            <p id="leftcontent">
+              First name:<input type="text" name="FirstName" value=""><br>
+              Last name:  <input type="text" name="LastName" value=""><br>
+              Email:      <input type="text" name="Email" value=''><br>
+              <input name="Submit" type="submit" value="Submit">
+            </p>
+          </form> 
+        </div>
+      </div>
+    <!-- TemplateEndRepeat --><!-- TemplateBeginEditable name="EditRegion2" -->
+      <div class="home_container">
+        <div id="my_logo2">
+        <iframe width="850" height="400" src="http://www.youtube.com/embed/JrdEMERq8MA" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+      
+    <!-- TemplateEndEditable --></div>
+  <div id="sticky_navigation_wrapper">
+    <div id="sticky_navigation">
+      <div class="demo_container">
+        <ul>
+          <li><!-- TemplateBeginRepeat name="RepeatRegion2" --><a href="/index.html" class="selected">HOME</a><!-- TemplateEndRepeat --></li>
+          <li><!-- TemplateBeginRepeat name="RepeatRegion3" --><a href="/ryan.html#ryan">RYAN</a><!-- TemplateEndRepeat --></li>
+          <li><!-- TemplateBeginRepeat name="RepeatRegion4" --><a href="/videos.html#videos">VIDEOS</a><!-- TemplateEndRepeat --></li>
+          <li><!-- TemplateBeginRepeat name="RepeatRegion5" --><a href="/Operari.html#operari"><em>Operari</em></a><!-- TemplateEndRepeat --></li>
+          <li><!-- TemplateBeginRepeat name="RepeatRegion6" --><a href="/apps.html#apps">APPS</a><!-- TemplateEndRepeat --></li>
+          <li><!-- TemplateBeginRepeat name="RepeatRegion7" --><a href="/search.html#search">SEARCH</a><!-- TemplateEndRepeat --></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- TemplateEndRepeat -->
+<!-- #demo_top_wrapper -->
+
+<!-- FROM THE TOP TO THE BOTTOM OF THIS WEBSITE, EVERYTHING IS CUSTOM AND STARTED FROM NOTHING MORE THAN A BLANK DOCUMENT -->
+<!-- TemplateBeginEditable name="EditRegion3" -->
+<section id="main">
+  <div id="content">
+    <h1>W3schools	&amp; Udacity </h1>
+    <p>by <a href="http://www.facebook.com/mrryanprice" target="_blank">Ryan Alexander</a></p>
+    <p>About a month ago I started with some basic HTML over at W3schools. Today I am enrolled in several courses over at Udacity and I am proud to say that between the two of these websites, I have been able to grasp some of the foundations the internet is built around much easier than ever before. I still have a long way to go, but for now, the foundation is formed and the walls are going up. </p>
+    <p>&nbsp;</p>
+    <p>This website is for </p>
+    <p><span id="HIGHLIGHT">EDUCATIONAL PURPOSES ONLY</span></p>
+    <p>To visit Udacity <a href="http://www.udacity.com" target="_blank">Click Here</a></p>
+    <p>To visit W3schools <a href="http://www.w3schools.com" target="_blank">Click Here</a></p>
+    <A NAME="updates"></A><h2><strong>THIS SECTION WILL DETAIL ALL THE CHANGES MADE TO THIS PAGE</strong></h2>
+    <p><strong>11/10/12 - CREATED</strong></p>
+    <p><strong>11/21/12 - UPDATED WITH NEW LAYOUT AND CONTENT</strong></p>
+  </div>
+</section>
+<!-- TemplateEndEditable -->
+<!-- this is the end of the top #main section -->
+
+
+<!-- this is the beggining of the media section --><!-- TemplateBeginEditable name="EditRegion4" -->
+<section id="media">
+  <div id="videos">
+    <iframe width="970" height="425" src="http://www.youtube.com/embed/7MgLbBSjR5Y" frameborder="0" allowfullscreen></iframe>
+  </div>
+</section>
+<!-- TemplateEndEditable --><!-- this is the end of the #media section -->
+	
+
+
+<footer>
+	<p>Copyright © 2012 - Lazyguymedia.info • Created by <a href="http://www.facebook.com/mrryanprice">Ryan Alexander</a></p>
+</footer>
+
+</body>
+</html>

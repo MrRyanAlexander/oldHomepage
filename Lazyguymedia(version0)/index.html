@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html><!-- InstanceBegin template="/Templates/index.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Lazyguymedia</title>
+<!-- InstanceEndEditable -->
+<!-- This website is being brought to you by: Ryan Alexander. I started this website as a way to learn HTML 
+and then I learned that I need to know much more than just HTML. I have already started learning several 
+different languages and via this source, you will be able to find my code trails. :-) -->
+
+<meta name="description" content="Education tutorial on HTML and CSS" /> 
+<meta name="author" content="Ryan Alexander" />
+
+<link href="css/demo.css" rel="stylesheet" type="text/css" />
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- DO NOT DELETE -->
+<link rel="stylesheet" href="css/sticky-navigation.css" />
+
+<!-- FAVICON -->
+<link rel="shortcut icon" href="/lazy.ico" type="image/x-icon" >
+    
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script>
+$(function() {
+
+	// grab the initial top offset of the navigation 
+	var sticky_navigation_offset_top = $('#sticky_navigation').offset().top;
+	
+	// our function that decides weather the navigation bar should have "fixed" css position or not.
+	var sticky_navigation = function(){
+		var scroll_top = $(window).scrollTop(); // our current vertical position from the top
+		
+		// if we've scrolled more than the navigation, change its position to fixed to stick to top, otherwise change it back to relative
+		if (scroll_top > sticky_navigation_offset_top) { 
+			$('#sticky_navigation').css({ 'position': 'fixed', 'top':0, 'left':0 });
+		} else {
+			$('#sticky_navigation').css({ 'position': 'relative' }); 
+		}   
+	};
+	
+	// run our function on load
+	sticky_navigation();
+	
+	// and run it again every time you scroll
+	$(window).scroll(function() {
+		 sticky_navigation();
+	});
+	
+	// NOT required:
+	// for this demo disable all links that point to "#"
+	$('a[href="#"]').click(function(event){ 
+		event.preventDefault(); 
+	});
+
+  $('#form').submit(function(event){
+    event.preventDefault();
+    alert('Trying to create this site prompted me to learn programming!');
+  });
+	
+});
+
+</script>
+
+<!-- UPDATE THE DATE AFTER EACH EDIT 11/20/12 @ 9:45PM PST -->
+
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+
+<div id="demo_top_wrapper">
+  <div id="demo_top">
+    <div class="demo_container">
+      <div id="my_logo"><a href="/index.html"><img src="images/Lazy.png" width="728" height="90" /></a><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat --></div>
+    </div>
+    >
+    <div class="right_container">
+      <div id="rightcontent">
+        <p>&nbsp;</p>
+        <p>The creator of the Python Code named it after the 'Monty Python'</p>
+        <p>&nbsp;</p>
+        <p>Today is 11-29-12        </p>
+        <p>&nbsp;</p>
+        <p>Last update </p>
+        <p>@ 6:20pm PST      </p>
+      </div>
+    </div>
+    <!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
+      <div class="left_container">
+        <div id="leftcontent">
+          <p><span id="Join">py. Join my<br>
+          mailing list</span></p>
+          <form name="input" id="form">
+            <p id="leftcontent">
+              First name:<input type="text" name="FirstName" value=""><br>
+              Last name:  <input type="text" name="LastName" value=""><br>
+              Email:      <input type="text" name="Email" value=''><br>
+              <input name="Submit" type="submit" value="Submit">
+            </p>
+          </form> 
+        </div>
+      </div>
+    <!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat --><!-- InstanceBeginEditable name="EditRegion2" -->
+      <div class="home_container">
+        <div id="my_logo2">
+          <iframe width="970" height="425" src="http://www.youtube.com/embed/JrdEMERq8MA" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    <!-- InstanceEndEditable --></div>
+  <div id="sticky_navigation_wrapper">
+    <div id="sticky_navigation">
+      <div class="demo_container">
+        <ul>
+          <li><a href="index.html" class="selected">HOME</a></li>
+          <li><a href="ryan.html">RYAN</a></li>
+          <li><a href="videos.html">VIDEOS</a></li>
+          <li><a href="Operari.html"><em>Operari</em></a></li>
+          <li><a href="apps.html">APPS</a></li>
+          <li><a href="search.html">SEARCH</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
+<!-- #demo_top_wrapper -->
+
+<!-- FROM THE TOP TO THE BOTTOM OF THIS WEBSITE, EVERYTHING IS CUSTOM AND STARTED FROM NOTHING MORE THAN A BLANK DOCUMENT -->
+<!-- InstanceBeginEditable name="EditRegion3" -->
+<A NAME="home"></A>
+<section id="main">
+  <div id="content">
+    <h1>&nbsp;</h1>
+    <h1>W3schools	&amp; Udacity </h1>
+    <p>by <a href="http://www.facebook.com/mrryanprice" target="_blank">Ryan Alexander</a></p>
+    <p>About a month ago I started with some basic HTML over at W3schools. Today I am enrolled in several courses over at Udacity and I am proud to say that between the two of these websites, I have been able to grasp some of the foundations the internet is built around much easier than ever before. I still have a long way to go, but for now, the foundation is formed and the walls are going up. </p>
+    <p>&nbsp;</p>
+    <p>This website is for </p>
+    <p><span id="HIGHLIGHT">EDUCATIONAL PURPOSES ONLY</span></p>
+    <p>To visit Udacity <a href="http://www.udacity.com" target="_blank">Click Here</a></p>
+    <p>To visit W3schools <a href="http://www.w3schools.com" target="_blank">Click Here</a></p>
+    <h2><strong>THIS SECTION WILL DETAIL ALL THE CHANGES MADE TO THIS PAGE</strong></h2>
+    <p><strong>11/10/12 - CREATED</strong></p>
+    <p><strong>11/21/12 - UPDATED WITH NEW LAYOUT AND CONTENT</strong></p>
+    <p><strong>11/22/12 - UPDATED &quot;MAIN_content&lt;div&gt;&quot;</strong></p>
+    <p><strong>11/23/12 - UPDATED PAGES, COLORS, CONTENT AND MORE</strong></p>
+    <p><strong>11/27/12 - EDITED oPERARI - ADDED TO RYAN PAGE</strong>  </p>
+  </div>
+</section>
+<!-- InstanceEndEditable -->
+<!-- this is the end of the top #main section -->
+
+
+<!-- this is the beggining of the media section --><!-- InstanceBeginEditable name="EditRegion4" -->
+<section id="media">
+  <div id="videos">
+<iframe width="970" height="425" src="http://www.youtube.com/embed/IlNU60ZKj3I" frameborder="0" allowfullscreen></iframe>
+<object width="32" height="32">
+</object>
+  </div>
+</section>
+<!-- InstanceEndEditable --><!-- this is the end of the #media section -->
+	
+
+
+<footer>
+	<p>Copyright © 2012 - Lazyguymedia.info • Created by <a href="http://www.facebook.com/mrryanprice">Ryan Alexander</a></p>
+</footer>
+
+</body>
+<!-- InstanceEnd --></html>
